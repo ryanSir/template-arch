@@ -1,0 +1,67 @@
+<<单体架构项目工程模板>>
+传统充血模型
+工程依赖关系：
+    sub-trial-core >> sub-trial-service >>  sub-trial-integration >> sub-trial-dao >> sub-trial-pojo >> sub-trial-common
+
+每个模块详细说明：
+    sub-trial-core:
+        annotation: 自定义注解
+        aspect: 切面
+        config: 配置
+        event: 消息事件
+        filter: 过滤器
+        interceptor: 拦截器
+        mq: 消息
+        schedule: 定时任务
+        web:
+            api: 提供给外部系统调用的接口
+                AbstractApi: 抽象api
+            controller: 本系统前端调用接口
+                AbstractController: 抽象controller
+    sub-trial-service:
+        ${业务模块}:
+            impl：
+                接口实现
+            model：
+                业务模型
+            ${接口}
+        frame：抽象类
+        AbstractService: 抽象服务类
+    sub-trial-dao:
+        mapper:
+            mapper接口
+        po: (Persistence Object) 持久对象
+                * 用于表示数据库中的一条记录,没有任何行为方法；
+                * 遵守 Java Bean 的规范，只拥有 getter/setter 方法;
+                * 可以将一条记录做为一个对象处理，可以方便转化为其他对象。
+        my.mapper:
+            抽象mapper接口
+        dao: (Data Access Object ) 数据访问对象
+                * 负责持久层操作，通常和 PO 结合使用;
+                * 包含了各种数据库的操作方法,为业务层提供数据库的 CRUD 操作;
+    sub-trial-integration:
+        api: 请求的三方接口
+        oss: oss client
+        redis: redis client
+    sub-trial-pojo:
+        ${bizModuleName}:
+            vo: (View Object)值对象
+                * 视图对象，用于展示层;
+                * 减少传输数据量大小和保护数据库结构不外泄。
+            bo:（Business Object）
+                * 将业务逻辑封装为一个对象，封装了对 DAO、RPC 等的调用;
+                * 可以包含一个或多个其他对象，如一个简历BO,包含教育经历、工作经历、社会关系等 PO/DO 对象
+                * 可以进行 PO/DO 与 VO/DTO 之间的转换;
+            dto: Data Transfer Object）数据传输对象
+                * 表示一个数据传输对象;
+                * 通常用于不同服务或服务不同分层之间的数据传输;
+                * 与 VO 概念相似，区别点在于设计理念上，主要用于 API 服务调用。
+            do: Domain Object）
+                * 领域对象，就是从现实世界中抽象出来的有形或无形的业务实体。
+    sub-trial-common:
+        constants: 常量
+        enums： 枚举
+        model：公共
+        throwable：
+            error：
+            exception：
